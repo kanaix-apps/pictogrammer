@@ -270,10 +270,10 @@ interface IconCardProps {
   copied: boolean;
   onDownloadSVG: () => void;
   onDownloadPNG: () => void;
-  onCopy: () => void;
+  onCopyPNG: () => void;
 }
 
-function IconCard({ icon, color, copied, onDownloadSVG, onDownloadPNG, onCopy }: IconCardProps) {
+function IconCard({ icon, color, copied, onDownloadSVG, onDownloadPNG, onCopyPNG }: IconCardProps) {
   const [hov, setHov] = useState(false);
   const processed = applyColor(icon.svg, icon.isAlphaSvg, color);
   const sized = icon.isAlphaSvg
@@ -292,16 +292,16 @@ function IconCard({ icon, color, copied, onDownloadSVG, onDownloadPNG, onCopy }:
       <div style={S.lbl as CSSProperties}>{icon.label}</div>
       {hov && (
         <div style={S.overlay as CSSProperties}>
-          <div style={{ display: "flex", gap: 5 }}>
+          <div style={{ display: "flex", gap: 5, marginBottom: 4 }}>
             <button style={S.dlBtn as CSSProperties} onClick={onDownloadSVG}>
-              SVG
+              SVG保存
             </button>
             <button style={S.dlBtn as CSSProperties} onClick={onDownloadPNG}>
-              PNG
+              PNG保存
             </button>
           </div>
-          <button style={cpBtnStyle(copied)} onClick={onCopy}>
-            {copied ? "コピー済み" : "SVGをコピー"}
+          <button style={cpBtnStyle(copied)} onClick={onCopyPNG}>
+            {copied ? "コピー済み" : "PNGをコピー"}
           </button>
         </div>
       )}
@@ -430,12 +430,29 @@ export default function PictogramGen() {
     img.src = url;
   }
 
-  async function copySVG(icon: Icon, i: number) {
-    await navigator.clipboard.writeText(
-      applyColor(icon.svg, icon.isAlphaSvg, color)
-    );
-    setCopied(i);
-    setTimeout(() => setCopied(null), 1500);
+  async function copyPNG(icon: Icon, i: number) {
+    const svgStr = applyColor(icon.svg, icon.isAlphaSvg, color);
+    const blob = new Blob([svgStr], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => {
+      const size = 512;
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, size, size);
+      canvas.toBlob(async (pngBlob) => {
+        if (!pngBlob) return;
+        await navigator.clipboard.write([
+          new ClipboardItem({ "image/png": pngBlob }),
+        ]);
+        setCopied(i);
+        setTimeout(() => setCopied(null), 1500);
+      }, "image/png");
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
   }
 
   function clearHistory() {
@@ -710,7 +727,7 @@ export default function PictogramGen() {
                 copied={copied === i}
                 onDownloadSVG={() => downloadSVG(icon)}
                 onDownloadPNG={() => downloadPNG(icon)}
-                onCopy={() => copySVG(icon, i)}
+                onCopyPNG={() => copyPNG(icon, i)}
               />
             ))}
           </div>
