@@ -52,7 +52,7 @@ const S: Record<string, CSSProperties | ((...args: unknown[]) => CSSProperties)>
     padding: "1.5rem 1rem 3rem",
     fontFamily: "system-ui,sans-serif",
   },
-  wrap: { maxWidth: 640, margin: "0 auto" },
+  wrap: { maxWidth: 800, margin: "0 auto" },
   hdr: {
     display: "flex",
     alignItems: "center",
@@ -157,7 +157,7 @@ const S: Record<string, CSSProperties | ((...args: unknown[]) => CSSProperties)>
   },
   grid: {
     display: "grid",
-    gridTemplateColumns: "repeat(4,1fr)",
+    gridTemplateColumns: "repeat(5,1fr)",
     gap: 8,
   },
   lbl: {

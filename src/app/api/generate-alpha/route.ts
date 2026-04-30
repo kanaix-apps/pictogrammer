@@ -30,19 +30,19 @@ export async function POST(req: NextRequest) {
 フレーム: fill="none" stroke="FRAMECOLOR" stroke-width="6"
 textColor: "FRAMECOLOR"
 
-スタイルB: filled（4個）
+スタイルB: filled（3個）
 フレーム: fill="FRAMECOLOR" stroke="none"（塗りつぶし）
 textColor: "white"
 
-スタイルC: inverted（4個）
+スタイルC: inverted（3個）
 背景: <rect x="0" y="0" width="100" height="100" fill="FRAMECOLOR"/>
 フレーム: fill="none" stroke="white" stroke-width="4"
 textColor: "white"
 
-フレーム形状（12個で全種使うこと）:
+フレーム形状（10個で使うこと）:
 正円 / 角丸四角 / ヘキサゴン / ダイアモンド（45度回転した四角）/
 二重円 / ギザギザスタンプ / アーチ形 / 吹き出し型 /
-楕円 / ブラケット[] / ミニマル下線 / コーナーフレーム
+楕円 / ブラケット[]
 
 JSONのみ返答:
 [{
@@ -54,7 +54,7 @@ JSONのみ返答:
   "fontFamily":"sans-serif",
   "fontWeight":"900",
   "dy":0
-},...12個]`,
+},...10個]`,
       },
     ],
   });

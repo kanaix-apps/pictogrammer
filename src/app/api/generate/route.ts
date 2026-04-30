@@ -27,7 +27,7 @@ relatedについて:
 
 JSONのみ返答（説明・コードブロック不要）:
 {
-  "icons": [{"label":"日本語5文字以内","icon":"lucide-icon-name"},...12個],
+  "icons": [{"label":"日本語5文字以内","icon":"lucide-icon-name"},...10個],
   "related": ["ワード1","ワード2",...6個]
 }`,
       },
