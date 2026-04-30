@@ -691,7 +691,7 @@ export default function PictogramGen() {
 
         {loading && (
           <div style={S.grid as CSSProperties}>
-            {Array.from({ length: 12 }).map((_, i) => (
+            {Array.from({ length: 10 }).map((_, i) => (
               <div key={i} style={skStyle(i)} />
             ))}
           </div>
