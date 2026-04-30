@@ -507,7 +507,7 @@ export default function PictogramGen() {
     if (e.key === "Enter" && !e.nativeEvent.isComposing) generate();
   }
 
-  const showTags = history.length > 0 || lastQuery !== "";
+  const showTags = true;
   const isAlphaMode = mode === "alpha";
 
   return (
@@ -594,25 +594,23 @@ export default function PictogramGen() {
                 gap: ".75rem",
               }}
             >
-              {lastQuery !== "" && (
-                <div>
-                  <div style={S.tagLabel as CSSProperties}>関連ワード</div>
-                  <div style={{ ...(S.tagRow as CSSProperties), minHeight: 26 }}>
-                    {related.map((r) => (
-                      <button
-                        key={r}
-                        style={S.relatedTag as CSSProperties}
-                        onClick={() => {
-                          setQuery(r);
-                          generate(r);
-                        }}
-                      >
-                        + {r}
-                      </button>
-                    ))}
-                  </div>
+              <div>
+                <div style={S.tagLabel as CSSProperties}>関連ワード</div>
+                <div style={{ ...(S.tagRow as CSSProperties), minHeight: 26 }}>
+                  {related.map((r) => (
+                    <button
+                      key={r}
+                      style={S.relatedTag as CSSProperties}
+                      onClick={() => {
+                        setQuery(r);
+                        generate(r);
+                      }}
+                    >
+                      + {r}
+                    </button>
+                  ))}
                 </div>
-              )}
+              </div>
               {history.length > 0 && (
                 <div>
                   <div
