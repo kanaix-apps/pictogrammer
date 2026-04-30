@@ -13,6 +13,18 @@ const PALETTE = [
 ];
 const HISTORY_KEY = "pictogrammer_history";
 
+const SEED_WORDS = [
+  "旅行","音楽","料理","自然","スポーツ","映画","読書","動物","海","山",
+  "祭り","花火","温泉","夜景","カフェ","図書館","病院","学校","駅","空港",
+  "春","夏","秋","冬","朝","夜","雨","風","雪","星",
+  "犬","猫","鳥","魚","花","木","空","海","川","森",
+];
+
+function getInitialRelated(): string[] {
+  const shuffled = [...SEED_WORDS].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 6);
+}
+
 interface Icon {
   label: string;
   icon?: string;
@@ -355,7 +367,7 @@ function IconCard({ icon, color, copied, onDownloadSVG, onDownloadPNG, onCopyPNG
 export default function PictogramGen() {
   const [query, setQuery] = useState("");
   const [icons, setIcons] = useState<Icon[]>([]);
-  const [related, setRelated] = useState<string[]>([]);
+  const [related, setRelated] = useState<string[]>(getInitialRelated);
   const [history, setHistory] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
