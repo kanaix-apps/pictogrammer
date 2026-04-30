@@ -10,6 +10,8 @@ export async function POST(req: NextRequest) {
   }
 
   const L = letter.toUpperCase();
+  // 文字数に応じてフォントサイズを決定（コード側で制御）
+  const fontSize = L.length === 1 ? 42 : 30;
 
   const message = await client.messages.create({
     model: "claude-sonnet-4-20250514",
@@ -17,44 +19,42 @@ export async function POST(req: NextRequest) {
     messages: [
       {
         role: "user",
-        content: `アルファベット「${L}」を中央に表示するためのデコレーションフレームSVGを12種類生成してください。
+        content: `viewBox="0 0 100 100" のSVGキャンバスに、文字を中央に表示するためのデコレーションフレームを10種類生成してください。
 
 【絶対に守ること】
-- 文字は一切描画しない。フレーム・図形のみ生成する。
-- 色には必ず FRAMECOLOR というプレースホルダー文字列を使う（#1a1a1aや#000は使わない）
-- stroke-width は必ず 5〜8 の太さにする
+- 文字・テキストは一切描画しない。フレームと背景の図形のみ生成する。
+- 色は必ず FRAMECOLOR というプレースホルダーのみ使う（#000・#1a1a1a 等は使わない）
+- white はそのまま white と書いてよい
+- stroke-width は 5〜7 に統一する
+- フレームはキャンバスの端に配置し、中央 40×40 の領域（x:30〜70, y:30〜70）を空けること
+- filled スタイルでは、塗りつぶし図形の上に文字が白で乗るため、図形が中央を完全に覆ってOK
 
-【3スタイルを4個ずつ必ず生成】
-
+【3スタイルを配分して10個生成】
 スタイルA: outline（4個）
-フレーム: fill="none" stroke="FRAMECOLOR" stroke-width="6"
-textColor: "FRAMECOLOR"
+  フレームのみ: fill="none" stroke="FRAMECOLOR" stroke-width="6"
+  textColor: "FRAMECOLOR"
 
 スタイルB: filled（3個）
-フレーム: fill="FRAMECOLOR" stroke="none"（塗りつぶし）
-textColor: "white"
+  塗りつぶし図形: fill="FRAMECOLOR" stroke="none"
+  textColor: "white"
 
 スタイルC: inverted（3個）
-背景: <rect x="0" y="0" width="100" height="100" fill="FRAMECOLOR"/>
-フレーム: fill="none" stroke="white" stroke-width="4"
-textColor: "white"
+  最初に背景: <rect x="0" y="0" width="100" height="100" fill="FRAMECOLOR"/>
+  その上にフレーム: fill="none" stroke="white" stroke-width="5"
+  textColor: "white"
 
-フレーム形状（10個で使うこと）:
-正円 / 角丸四角 / ヘキサゴン / ダイアモンド（45度回転した四角）/
-二重円 / ギザギザスタンプ / アーチ形 / 吹き出し型 /
-楕円 / ブラケット[]
+【フレーム形状（10個すべて異なる形にすること）】
+正円 / 角丸四角 / ヘキサゴン / ダイアモンド /
+二重円(outline限定) / ギザギザスタンプ / アーチ形 / 吹き出し /
+楕円 / ブラケット型
 
-JSONのみ返答:
+JSONのみ返答（コードブロック・説明不要）:
 [{
-  "label":"日本語5文字以内",
-  "framesvg":"SVG図形コード（FRAMECOLOR使用・文字なし）",
-  "fillStyle":"outline|filled|inverted",
-  "textColor":"FRAMECOLOR または white",
-  "fontSize":34,
-  "fontFamily":"sans-serif",
-  "fontWeight":"900",
-  "dy":0
-},...10個]`,
+  "label": "日本語5文字以内",
+  "framesvg": "SVG要素のみ（<svg>タグなし・FRAMECOLORのみ使用）",
+  "fillStyle": "outline|filled|inverted",
+  "textColor": "FRAMECOLOR または white"
+}, ...10個]`,
       },
     ],
   });
@@ -71,10 +71,6 @@ JSONのみ返答:
     framesvg: string;
     fillStyle: string;
     textColor: string;
-    fontSize: number;
-    fontFamily: string;
-    fontWeight: string;
-    dy: number;
   }> = JSON.parse(m[0]);
 
   const icons = parsed.map((item) => {
@@ -83,17 +79,14 @@ JSONのみ返答:
       framesvg = "",
       fillStyle = "outline",
       textColor = "FRAMECOLOR",
-      fontSize = 34,
-      fontFamily = "sans-serif",
-      fontWeight = "900",
-      dy = 0,
     } = item;
 
+    // dy・fontSizeはClaudeに任せず、コード側で確定値を使う
     const svg = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   ${framesvg}
-  <text x="50" y="50" dy="${dy}" text-anchor="middle" dominant-baseline="central"
-    font-size="${fontSize}" font-family="${fontFamily}" font-weight="${fontWeight}"
-    fill="${textColor}" stroke="none">${L}</text>
+  <text x="50" y="50" dy="0" text-anchor="middle" dominant-baseline="central"
+    font-size="${fontSize}" font-family="system-ui, sans-serif" font-weight="900"
+    fill="${textColor}" stroke="none" letter-spacing="-1">${L}</text>
 </svg>`;
 
     return { label, svg, isAlphaSvg: true, fillStyle };
