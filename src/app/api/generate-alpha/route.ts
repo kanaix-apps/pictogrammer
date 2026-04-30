@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     messages: [
       {
         role: "user",
-        content: `viewBox="0 0 100 100" のSVGキャンバスに、文字を中央に表示するためのデコレーションフレームを10種類生成してください。
+        content: `viewBox="0 0 100 100" のSVGキャンバスに、「${L}」を中央に表示するためのデコレーションフレームを10種類生成してください。
 
 【絶対に守ること】
 - 文字・テキストは一切描画しない。フレームと背景の図形のみ生成する。

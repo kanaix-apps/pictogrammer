@@ -54,7 +54,7 @@ function saveHistory(query: string, prev: string[]): string[] {
 }
 
 function isSingleAlpha(str: string): boolean {
-  return /^[a-zA-Z]{1,2}$/.test(str.trim());
+  return /^[a-zA-Z0-9]{1,2}$/.test(str.trim());
 }
 
 const S: Record<string, CSSProperties | ((...args: unknown[]) => CSSProperties)> = {
