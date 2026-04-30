@@ -267,24 +267,47 @@ function applyColor(
 function DlBtn({ label, onClick }: { label: string; onClick: () => void }) {
   const [hov, setHov] = useState(false);
   return (
-    <button
-      style={{
-        padding: "6px 14px",
-        background: "#185FA5",
-        color: "#fff",
-        border: "none",
-        borderRadius: 7,
-        fontSize: 11,
-        fontWeight: 600,
-        cursor: "pointer",
-        minWidth: 52,
-      }}
+    <div
+      style={{ position: "relative", display: "inline-block" }}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      onClick={onClick}
     >
-      {hov ? "ダウンロード" : label}
-    </button>
+      {hov && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "calc(100% + 4px)",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "rgba(0,0,0,0.7)",
+            color: "#fff",
+            fontSize: 9,
+            padding: "2px 6px",
+            borderRadius: 4,
+            whiteSpace: "nowrap",
+            pointerEvents: "none",
+          }}
+        >
+          ダウンロード
+        </div>
+      )}
+      <button
+        style={{
+          padding: "6px 14px",
+          background: "#185FA5",
+          color: "#fff",
+          border: "none",
+          borderRadius: 7,
+          fontSize: 11,
+          fontWeight: 600,
+          cursor: "pointer",
+          minWidth: 52,
+        }}
+        onClick={onClick}
+      >
+        {label}
+      </button>
+    </div>
   );
 }
 
