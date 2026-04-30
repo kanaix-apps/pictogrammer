@@ -529,27 +529,32 @@ export default function PictogramGen() {
         {/* Header */}
         <div style={S.hdr as CSSProperties}>
           <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 3,
-              width: 28,
-              height: 28,
-            }}
+            onClick={() => window.location.reload()}
+            style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}
           >
-            {[0.9, 0.4, 0.4, 0.9].map((o, i) => (
-              <div
-                key={i}
-                style={{
-                  background: `rgba(24,95,165,${o})`,
-                  borderRadius: 4,
-                }}
-              />
-            ))}
-          </div>
-          <div style={S.titleWrap as CSSProperties}>
-            <span style={S.titleJa as CSSProperties}>ピクトグラマー</span>
-            <span style={S.titleEn as CSSProperties}>pictogrammer</span>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 3,
+                width: 28,
+                height: 28,
+              }}
+            >
+              {[0.9, 0.4, 0.4, 0.9].map((o, i) => (
+                <div
+                  key={i}
+                  style={{
+                    background: `rgba(24,95,165,${o})`,
+                    borderRadius: 4,
+                  }}
+                />
+              ))}
+            </div>
+            <div style={S.titleWrap as CSSProperties}>
+              <span style={S.titleJa as CSSProperties}>ピクトグラマー</span>
+              <span style={S.titleEn as CSSProperties}>pictogrammer</span>
+            </div>
           </div>
         </div>
 
