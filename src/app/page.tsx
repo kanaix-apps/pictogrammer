@@ -264,6 +264,30 @@ function applyColor(
     .replace(/fill="currentColor"/g, `fill="${color}"`);
 }
 
+function DlBtn({ label, onClick }: { label: string; onClick: () => void }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <button
+      style={{
+        padding: "6px 14px",
+        background: "#185FA5",
+        color: "#fff",
+        border: "none",
+        borderRadius: 7,
+        fontSize: 11,
+        fontWeight: 600,
+        cursor: "pointer",
+        minWidth: 52,
+      }}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      onClick={onClick}
+    >
+      {hov ? "ダウンロード" : label}
+    </button>
+  );
+}
+
 interface IconCardProps {
   icon: Icon;
   color: string;
@@ -292,16 +316,12 @@ function IconCard({ icon, color, copied, onDownloadSVG, onDownloadPNG, onCopyPNG
       <div style={S.lbl as CSSProperties}>{icon.label}</div>
       {hov && (
         <div style={S.overlay as CSSProperties}>
-          <div style={{ display: "flex", gap: 5, marginBottom: 4 }}>
-            <button style={S.dlBtn as CSSProperties} onClick={onDownloadSVG}>
-              SVG保存
-            </button>
-            <button style={S.dlBtn as CSSProperties} onClick={onDownloadPNG}>
-              PNG保存
-            </button>
+          <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
+            <DlBtn label="SVG" onClick={onDownloadSVG} />
+            <DlBtn label="PNG" onClick={onDownloadPNG} />
           </div>
           <button style={cpBtnStyle(copied)} onClick={onCopyPNG}>
-            {copied ? "コピー済み" : "PNGをコピー"}
+            {copied ? "コピー済み" : "PNGコピー"}
           </button>
         </div>
       )}
