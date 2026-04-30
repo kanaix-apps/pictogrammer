@@ -602,67 +602,70 @@ export default function PictogramGen() {
           )}
         </div>
 
-        {/* Color */}
-        {icons.length > 0 && (
+        {/* Color + やり直す */}
+        {(icons.length > 0 || loading) && (
           <div
             style={{
-              ...(S.box as CSSProperties),
               display: "flex",
               alignItems: "center",
               gap: 8,
-              padding: ".6rem .875rem",
+              marginBottom: ".875rem",
             }}
           >
-            <span
-              style={{
-                fontFamily: "monospace",
-                fontSize: 10,
-                color: "#aaa",
-                letterSpacing: ".15em",
-                marginRight: 2,
-              }}
-            >
-              COLOR
-            </span>
-            {PALETTE.map((c) => (
-              <button
-                key={c}
-                onClick={() => setColor(c)}
+            {icons.length > 0 && (
+              <div
                 style={{
-                  width: 20,
-                  height: 20,
-                  borderRadius: "50%",
-                  background: c,
-                  border: `2.5px solid ${color === c ? "#1a1a1a" : "transparent"}`,
-                  cursor: "pointer",
-                  outline: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: "#fff",
+                  border: "1px solid rgba(0,0,0,0.08)",
+                  borderRadius: 10,
+                  padding: ".45rem .75rem",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
                 }}
-              />
-            ))}
-            <input
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: "50%",
-                border: "2px solid #ddd",
-                padding: 0,
-                cursor: "pointer",
-              }}
-            />
-          </div>
-        )}
-
-        {/* Toolbar */}
-        {(icons.length > 0 || loading) && (
-          <div style={S.toolbar as CSSProperties}>
-            <span style={S.count as CSSProperties}>
-              {loading
-                ? "生成中..."
-                : `${icons.length} ${isAlphaMode ? "DESIGNS" : "ICONS"} · "${lastQuery.toUpperCase()}"`}
-            </span>
+              >
+                <span
+                  style={{
+                    fontFamily: "monospace",
+                    fontSize: 10,
+                    color: "#aaa",
+                    letterSpacing: ".15em",
+                    marginRight: 2,
+                  }}
+                >
+                  COLOR
+                </span>
+                {PALETTE.map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => setColor(c)}
+                    style={{
+                      width: 18,
+                      height: 18,
+                      borderRadius: "50%",
+                      background: c,
+                      border: `2.5px solid ${color === c ? "#1a1a1a" : "transparent"}`,
+                      cursor: "pointer",
+                      outline: "none",
+                    }}
+                  />
+                ))}
+                <input
+                  type="color"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  style={{
+                    width: 18,
+                    height: 18,
+                    borderRadius: "50%",
+                    border: "2px solid #ddd",
+                    padding: 0,
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+            )}
             <button
               style={S.retry as CSSProperties}
               disabled={loading}
