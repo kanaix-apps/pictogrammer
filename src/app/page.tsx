@@ -507,7 +507,7 @@ export default function PictogramGen() {
     if (e.key === "Enter" && !e.nativeEvent.isComposing) generate();
   }
 
-  const showTags = history.length > 0 || related.length > 0;
+  const showTags = history.length > 0 || lastQuery !== "";
   const isAlphaMode = mode === "alpha";
 
   return (
@@ -594,10 +594,10 @@ export default function PictogramGen() {
                 gap: ".75rem",
               }}
             >
-              {related.length > 0 && (
+              {lastQuery !== "" && (
                 <div>
                   <div style={S.tagLabel as CSSProperties}>関連ワード</div>
-                  <div style={S.tagRow as CSSProperties}>
+                  <div style={{ ...(S.tagRow as CSSProperties), minHeight: 26 }}>
                     {related.map((r) => (
                       <button
                         key={r}
