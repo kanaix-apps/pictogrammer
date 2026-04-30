@@ -268,11 +268,12 @@ interface IconCardProps {
   icon: Icon;
   color: string;
   copied: boolean;
-  onDownload: () => void;
+  onDownloadSVG: () => void;
+  onDownloadPNG: () => void;
   onCopy: () => void;
 }
 
-function IconCard({ icon, color, copied, onDownload, onCopy }: IconCardProps) {
+function IconCard({ icon, color, copied, onDownloadSVG, onDownloadPNG, onCopy }: IconCardProps) {
   const [hov, setHov] = useState(false);
   const processed = applyColor(icon.svg, icon.isAlphaSvg, color);
   const sized = icon.isAlphaSvg
@@ -291,9 +292,14 @@ function IconCard({ icon, color, copied, onDownload, onCopy }: IconCardProps) {
       <div style={S.lbl as CSSProperties}>{icon.label}</div>
       {hov && (
         <div style={S.overlay as CSSProperties}>
-          <button style={S.dlBtn as CSSProperties} onClick={onDownload}>
-            SVG 保存
-          </button>
+          <div style={{ display: "flex", gap: 5 }}>
+            <button style={S.dlBtn as CSSProperties} onClick={onDownloadSVG}>
+              SVG
+            </button>
+            <button style={S.dlBtn as CSSProperties} onClick={onDownloadPNG}>
+              PNG
+            </button>
+          </div>
           <button style={cpBtnStyle(copied)} onClick={onCopy}>
             {copied ? "コピー済み" : "SVGをコピー"}
           </button>
@@ -396,6 +402,32 @@ export default function PictogramGen() {
     a.download = icon.label + ".svg";
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  function downloadPNG(icon: Icon) {
+    const svgStr = applyColor(icon.svg, icon.isAlphaSvg, color);
+    const blob = new Blob([svgStr], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => {
+      const size = 512;
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, size, size);
+      canvas.toBlob((pngBlob) => {
+        if (!pngBlob) return;
+        const pngUrl = URL.createObjectURL(pngBlob);
+        const a = document.createElement("a");
+        a.href = pngUrl;
+        a.download = icon.label + ".png";
+        a.click();
+        URL.revokeObjectURL(pngUrl);
+      }, "image/png");
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
   }
 
   async function copySVG(icon: Icon, i: number) {
@@ -673,7 +705,8 @@ export default function PictogramGen() {
                 icon={icon}
                 color={color}
                 copied={copied === i}
-                onDownload={() => downloadSVG(icon)}
+                onDownloadSVG={() => downloadSVG(icon)}
+                onDownloadPNG={() => downloadPNG(icon)}
                 onCopy={() => copySVG(icon, i)}
               />
             ))}
