@@ -599,11 +599,7 @@ export default function PictogramGen() {
                     {history.map((h) => (
                       <button
                         key={h}
-                        style={
-                          isSingleAlpha(h)
-                            ? (S.alphaTag as CSSProperties)
-                            : (S.historyTag as CSSProperties)
-                        }
+                        style={S.historyTag as CSSProperties}
                         onClick={() => {
                           setQuery(h);
                           generate(h, true);
