@@ -447,6 +447,15 @@ export default function PictogramGen() {
     setLoading(false);
   }
 
+  function buildFilename(icon: Icon, ext: string): string {
+    const now = new Date();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
+    const hh = String(now.getHours()).padStart(2, "0");
+    const min = String(now.getMinutes()).padStart(2, "0");
+    return `Pictogrammer_${icon.label}_${lastQuery}_${mm}${dd}${hh}${min}.${ext}`;
+  }
+
   function downloadSVG(icon: Icon) {
     const blob = new Blob([applyColor(icon.svg, icon.isAlphaSvg, color)], {
       type: "image/svg+xml",
@@ -454,7 +463,7 @@ export default function PictogramGen() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = icon.label + ".svg";
+    a.download = buildFilename(icon, "svg");
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -476,7 +485,7 @@ export default function PictogramGen() {
         const pngUrl = URL.createObjectURL(pngBlob);
         const a = document.createElement("a");
         a.href = pngUrl;
-        a.download = icon.label + ".png";
+        a.download = buildFilename(icon, "png");
         a.click();
         URL.revokeObjectURL(pngUrl);
       }, "image/png");
